@@ -17,7 +17,7 @@ COPY . .
 EXPOSE 5000
 
 # Run app
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
 
 
 ##test purpose only
