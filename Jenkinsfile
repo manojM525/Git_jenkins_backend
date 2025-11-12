@@ -73,7 +73,7 @@ pipeline {
             // Update the image field using yq (v4)
             sh """
               echo "🧩 Updating backend image in ${DEPLOYMENT_FILE}..."
-              yq e -i '.spec.template.spec.containers[0].image = "${DOCKER_IMAGE}:${NEW_VERSION}"' ${DEPLOYMENT_FILE}
+              yq e -i -y '.spec.template.spec.containers[0].image = "${DOCKER_IMAGE}:${NEW_VERSION}"' ${DEPLOYMENT_FILE}
               
               git config user.name "${GIT_USER_NAME}"
               git config user.email "${GIT_USER_EMAIL}"
