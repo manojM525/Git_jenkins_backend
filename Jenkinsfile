@@ -72,6 +72,7 @@ pipeline {
 
             // Update the image field using yq (v4)
             sh """
+              git checkout main || git checkout -b main
               echo "🧩 Updating backend image in ${DEPLOYMENT_FILE}..."
               yq e -i '.spec.template.spec.containers[0].image = "${DOCKER_IMAGE}:${NEW_VERSION}"' ${DEPLOYMENT_FILE}
               
