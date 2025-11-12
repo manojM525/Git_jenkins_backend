@@ -25,7 +25,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        checkout scm
+        git branch: 'main', url: 'https://github.com/manojM525/Git_jenkins_backend.git'
       }
     }
 
