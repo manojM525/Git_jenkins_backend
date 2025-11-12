@@ -72,16 +72,19 @@ pipeline {
 
             // Update the image field using yq (v4)
             sh """
-              git checkout main || git checkout -b main
               echo "🧩 Updating backend image in ${DEPLOYMENT_FILE}..."
               yq e -i '.spec.template.spec.containers[0].image = "${DOCKER_IMAGE}:${NEW_VERSION}"' ${DEPLOYMENT_FILE}
-              
-              git config user.name "${GIT_USER_NAME}"
-              git config user.email "${GIT_USER_EMAIL}"
-              git add ${DEPLOYMENT_FILE}
-              git commit -m "chore(backend): bump image to v${NEW_VERSION}" || echo "No changes to commit"
-              git push origin main
-            """
+              """
+              withCredentials([usernamePassword(credentialsId: env.GIT_CRED_ID, usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) { 
+                sh """
+                  git config user.name "${GIT_USER_NAME}"
+                  git config user.email "${GIT_USER_EMAIL}"
+                  git checkout main || git checkout -b main
+                  git add ${DEPLOYMENT_FILE}
+                  git commit -m "chore(backend): bump image to v${NEW_VERSION}" || echo "No changes to commit"
+                  git push https://${GIT_USER}:${GIT_PASS}@github.com/manojM525/DEVOPS_DEPLOYMENT.git main
+                """
+              }
           }
         }
       }
